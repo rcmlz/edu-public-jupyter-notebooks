@@ -1,0 +1,13 @@
+{
+   "game_name" : "some_unique_name"
+  ,"MQTT" : {
+             "broker" : "test.mosquitto.org"
+            ,"port" : "1883"
+            ,"user" : None
+            ,"password" : None
+          }
+  ,"trennzeichen" : "#"
+  ,"verbose" : true
+  ,"spieler_datei" : "resources/valid_actors_input.txt"
+  ,"symbole_datei" : "resources/valid_symbols_input.txt"
+}
