@@ -1,0 +1,17 @@
+#Python
+__pycache__
+
+# Raku
+.precomp
+lib/.precomp
+
+# Jupyter
+*.log
+.ipynb_checkpoints
+
+# IntelliJ
+.idea
+
+.DS_Store
+
+*.log
