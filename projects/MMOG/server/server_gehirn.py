@@ -8,25 +8,7 @@ sys.path.append('lib')
 from common_lib import *
 sys.path.append('../lib/')
 from moves import *
-
-befehle = {
-     "help" : {
-        "doc" : "gibt diese Hilfe aus"
-        }
-    ,"status" : {
-        "doc" : "liefert aktuellen Status eines Spielers"
-        }
-    ,"spawn" : {
-        "doc" : "startet einen Spieler"
-        }
-    ,"harakiri" : {
-        "doc" : "terminiert einen Spieler"
-        }
-    ,"move" : {
-        "doc" : "move#x,y - versucht die Figur auf das Feld mit den Koordinaten x und y (int) zu bewegen, 1 Feld kostet 1 Energieeinheit"
-       ,"anzahl_parameter" : 2
-    }
-}
+from befehle import *
 
 def gehirn(spiel, spieler, ergebnis, befehl, parameter=None):
     global befehle
@@ -37,7 +19,7 @@ def gehirn(spiel, spieler, ergebnis, befehl, parameter=None):
 
     max_x = spiel["spieler"][spieler]["max_x"]
     max_y = spiel["spieler"][spieler]["max_y"]
-    
+
     if befehl == "help":
         return help(ergebnis)
 
@@ -55,8 +37,8 @@ def gehirn(spiel, spieler, ergebnis, befehl, parameter=None):
     elif befehl == "move":
         if parameter is None:
             new_msg = "Missing parameter move#x,y"
-        elif len(parameter) != 2:
-            new_msg = "Missing second parameter in move#x,y"            
+        elif len(parameter) != befehle[befehl]["anzahl_parameter"]:
+            new_msg = "Missing parameter in move#x,y"
         else:
             x_new, y_new = parameter
             x_old, y_old = spiel["spieler"][spieler]["position"]
@@ -77,7 +59,7 @@ def gehirn(spiel, spieler, ergebnis, befehl, parameter=None):
                 new_msg = "Du stehst schon auf Position {}".format((x_new, y_new))
 
             elif (x_new, y_new) not in positionen(spiel):
-                
+
                 if not ist_nah_genug(x_old, y_old, x_new, y_new):
                     new_msg = "Position {} ist zu weit entfernt vom Standort {}".format((x_new, y_new), (x_old, y_old))
                 else:
@@ -93,13 +75,13 @@ def gehirn(spiel, spieler, ergebnis, befehl, parameter=None):
     ergebnis['new_pos'] = new_pos
     ergebnis['new_life'] = new_life
     ergebnis['new_msg'] = new_msg
-    
+
     return ergebnis
 
 def ist_nah_genug(x_old, y_old, x_new, y_new):
     """
     Berechnet, ob eine Bewegung auf die neuen Koordinaten erlaubt ist
-    
+
     >>> ist_nah_genug(2, 7, 2, 5)
     True
     >>> ist_nah_genug(2, 7, 3, 6)
@@ -149,7 +131,7 @@ def ist_nah_genug(x_old, y_old, x_new, y_new):
     """
     moegliche_felder = (nord(x_old, y_old), sued(x_old, y_old), nord_west(x_old, y_old), sued_west(x_old, y_old), nord_ost(x_old, y_old), sued_ost(x_old, y_old))
     return (x_new, y_new) in moegliche_felder
-                    
+
 def initialisiere_position(spiel):
     """
     To Do

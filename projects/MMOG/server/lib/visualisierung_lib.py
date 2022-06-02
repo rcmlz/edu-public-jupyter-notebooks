@@ -59,11 +59,19 @@ def visualisierung(shutdown_flag, anzeige_aktualisieren_flag, config, spiel):
     STIFT.setTitle("MMOG - Massive Multiuser Online Game - {} x {}".format(SPIELFELDER_VERTIKAL, SPIELFELDER_HORIZONTAL))
     STIFT.addStatusBar(30)
     STIFT.drawImage("resources/tribute.jpg")
-    STIFT.setStatusText(
-        "Connect via MQTT to {} port: {} user: {} password: {} on topic: {}/your.email@kantiolten.ch and execute 'help' and 'spawn' command!".format(
-            config["MQTT"]["broker"], config["MQTT"]["port"], config["MQTT"]["user"], config["MQTT"]["password"], config["game_name"]
+    if config["MQTT"].has_key("user") and config["MQTT"].has_key("password"):
+        STIFT.setStatusText(
+            "Connect via MQTT to {} port: {} user: {} password: {} on topic: {}/your.email@kantiolten.ch and execute 'help' and 'spawn' command!".format(
+                config["MQTT"]["broker"], config["MQTT"]["port"], config["MQTT"]["user"], config["MQTT"]["password"], config["game_name"]
+            )
         )
-    )
+    else:
+        STIFT.setStatusText(
+            "Connect via MQTT to {} port: {} on topic: {}/your.email@kantiolten.ch and execute 'help' and 'spawn' command!".format(
+                config["MQTT"]["broker"], config["MQTT"]["port"], config["game_name"]
+            )
+        )
+        
     STIFT.repaint()
 
     while not shutdown_flag.isSet():

@@ -36,12 +36,12 @@ def spielleiter(shutdown_flag, anzeige_aktualisieren_flag, re_spawn_flag, spiel,
             spieler, befehl = posteingang.get(timeout=1)
             
             befehl, parameter = zerteile(befehl, spiel)
+                
             if befehl in befehle.keys():
                 spiel["spieler"][spieler]["max_x"] = spiel["conf"]["max_x"]
                 spiel["spieler"][spieler]["max_y"] = spiel["conf"]["max_y"]
 
                 ergebnis = {}
-                ergebnis['source'] = 'SERVER'
                 ergebnis['new_pos'] = None
                 ergebnis['new_life'] = None
                 ergebnis['new_msg'] = None
@@ -49,7 +49,7 @@ def spielleiter(shutdown_flag, anzeige_aktualisieren_flag, re_spawn_flag, spiel,
                 gehirn(spiel, spieler, ergebnis, befehl, parameter)
 
                 if befehl == "help":
-                   reply = "\nHELP\n" + ergebnis['new_msg']
+                    reply = ergebnis['new_msg']
                 else:
                     ergebnis['new_msg'] = "re: " + ergebnis['new_msg']
                 

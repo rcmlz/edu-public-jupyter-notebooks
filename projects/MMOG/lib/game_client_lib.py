@@ -3,12 +3,13 @@
 
 import ast #to do: replace by json for security
 from mqttclient import *
-from time import sleep
-import random
+from time import strftime, sleep
 from json import load
+from threading import Event
 
 attribute = {}
-attribute_werden_aktualisiert = False
+attribute_aktuell = Event()
+attribute_aktuell.set()
 
 class Game_Client:
 
@@ -19,27 +20,31 @@ class Game_Client:
         self.spieler = spieler
 
         self.spiel = config["game_name"]
-        self.kanal = "{}/{}".format(self.spiel,self.spieler)
+        self.mund = "{}/{}/mund".format(self.spiel,self.spieler)
+        self.ohr = "{}/{}/ohr".format(self.spiel,self.spieler)
         self.trennzeichen = config["trennzeichen"]
 
         self.client = self.setup_mqtt(config)
 
     def attribute(self):
-        global attribute
+        global attribute, attribute_aktuell
         
-        while attribute_werden_aktualisiert:
-            sleep(0.1)
-
+        if not attribute_aktuell.isSet():
+            attribute_aktuell.wait()
+        
+        if not attribute.has_key("updated"):
+            return self.refresh_attribute()
+        
         return attribute
 
     def refresh_attribute(self):
-        global attribute_werden_aktualisiert, attribute
-        attribute_werden_aktualisiert = True
-        self.publish("status")# status erzeugt eine Nachricht, so dass die Attribute automatisch aktualisiert werden
+        global attribute_aktuell, attribute
+        attribute_aktuell.clear()
+        self.publish("status") # status erfragt eine Nachricht vom Spielleiter, mit der die Attribute aktualisiert werden können
         return self.attribute()
 
     def publish(self, message):
-        self.client.publish(self.kanal, message)
+        self.client.publish(self.mund, message)
 
     def disconnect(self):
         self.client.disconnect()
@@ -59,7 +64,7 @@ class Game_Client:
             else:
                 client.connect(host=config["MQTT"]["broker"])
 
-            client.subscribe(self.kanal)
+            client.subscribe(self.ohr)
 
             if config["verbose"]:
                 client.setVerbose(False)
@@ -75,8 +80,7 @@ def react(topic, message):
         aktualisieren(message)
 
 def aktualisieren(message):
-    global attribute, attribute_werden_aktualisiert
-    attribute_werden_aktualisiert = True
+    global attribute, attribute_aktuell
     try:
         payload = ast.literal_eval(message) #ToDo: hier ist ein Sicherheitsproblem ... das müsste man durch json-parsing ersetzen
     except Exception as inst:
@@ -84,5 +88,6 @@ def aktualisieren(message):
         print(message)
     else:
         attribute = payload
+        attribute["updated"] = strftime('%Y-%m-%d %H:%M:%S')
     finally:
-        attribute_werden_aktualisiert = False
+        attribute_aktuell.set()

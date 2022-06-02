@@ -5,8 +5,6 @@ sys.path.append('../lib/')
 from moves import *
 
 def random_walk(game_client, schritte):
-    game_client.refresh_attribute()# durch absetzen des move Befehls weden die Attribute in der Schleife automatisch aktualisiert
-    
     for i in range(schritte):
         attribute = game_client.attribute()
         

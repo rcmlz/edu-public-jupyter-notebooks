@@ -23,7 +23,7 @@ while True:
 
     elif nachricht == "a":
         attribute = game_client.attribute()
-        print("Aktuelle Attribute: {})".format(attribute))
+        print("Aktuelle Attribute: {}".format(attribute))
 
     elif nachricht == "r":
         random_walk(game_client, 10)
