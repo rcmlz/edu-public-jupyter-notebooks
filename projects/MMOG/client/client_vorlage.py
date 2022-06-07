@@ -1,19 +1,29 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+##############################################################
 # Imports
+##############################################################
 import sys
-# im lib-Ordner finden sie ggf. interessante Funktionen, die sie benutzen können (und die auch der Server nutzt)
+# Im lib-Ordner finden Sie ggf. interessante Funktionen, die Sie benutzen können (und die auch der Server nutzt).
 sys.path.append('../lib/')
 from game_client_lib import *
 from moves import *
 
-# falls wir Funktionen auslagern wollen (und damit leichter testbar machen), könnten wir diese  z.B. 
-# in der Datei client_gehirn.py speichern, hier im Beispiel random_walk()
-from client_gehirn import *
+# Falls wir Funktionen auslagern wollen (und damit u.A. leichter testbar machen), können wir diese in Bibliotheks-Python-Dateien speichern,
+# aus welchen wir wie gewohnt so die Funktionen importieren:
+from client_gehirn_vorlage import *
 
+##############################################################
 # Settings
+##############################################################
 spieler = "some_player_name@somewhere.org"
 
-# Programm
 game_client = Game_Client(spieler, "../config/config.json")
+
+##############################################################
+# Programm
+##############################################################
 
 while True:
     nachricht = input("Befehl? (z.B.: help)", False)  # False: wenn "Abbrechen" geklickt wird, wird None zurückgegeben
@@ -26,8 +36,8 @@ while True:
         print("Aktuelle Attribute: {}".format(attribute))
 
     elif nachricht == "r":
-        random_walk(game_client, 10)
-
+        rettung_bei_x_y(game_client)
+    
     else:
         game_client.publish(nachricht)
 
