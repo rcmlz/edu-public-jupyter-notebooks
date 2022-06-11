@@ -26,20 +26,20 @@ def manuelle_steuerung(game_client):
     """
     while True:
         nachricht = input("Befehl? (z.B.: help|status|spawn|harakiri|move#x,y)", False)  # False: wenn "Abbrechen" geklickt wird, wird None zurückgegeben
-    
+
         if nachricht in (None,":bye"):
             break  # while Schleife verlassen
-        
+
         elif nachricht == "s1":
             spawnen(game_client)
-        
+
         elif nachricht == "s10":
-            spawnen_x_mal(game_client, 100)
+            spawnen_x_mal(game_client, 10)
 
         else:
             print("Befehl: {}".format(nachricht))
             game_client.publish(nachricht)
-        
+
         print_status(game_client)
 
 
