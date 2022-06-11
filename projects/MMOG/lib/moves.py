@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 def nord(x, y):
     """
     Berechnet Koordinaten in Nord
@@ -12,7 +15,8 @@ def nord(x, y):
     (3, 6)
 
     """
-    return (x, y-2)
+    if isinstance(x, int) and isinstance(y, int):
+        return (x, y-2)
 
 def sued(x, y):
     """
@@ -29,7 +33,8 @@ def sued(x, y):
 
 
     """
-    return (x, y+2)
+    if isinstance(x, int) and isinstance(y, int):
+        return (x, y+2)
 
 def nord_west(x, y):
     """
@@ -47,12 +52,13 @@ def nord_west(x, y):
     (3, 1)
 
     """
-    sum_is_even = (x + y) % 2
-    x_is_even = x % 2
-    if (x_is_even and sum_is_even) or (not x_is_even and not sum_is_even):
-        return (x-1, y-1)
-    else:
-        return (x, y-1)
+    if isinstance(x, int) and isinstance(y, int):
+        sum_is_even = (x + y) % 2
+        x_is_even = x % 2
+        if (x_is_even and sum_is_even) or (not x_is_even and not sum_is_even):
+            return (x-1, y-1)
+        else:
+            return (x, y-1)
 
 def sued_west(x, y):
     """
@@ -70,12 +76,13 @@ def sued_west(x, y):
     (3, 3)
 
     """
-    sum_is_even = (x + y) % 2
-    x_is_even = x % 2
-    if (x_is_even and sum_is_even) or (not x_is_even and not sum_is_even):
-        return (x-1, y+1)
-    else:
-        return (x, y+1)
+    if isinstance(x, int) and isinstance(y, int):
+        sum_is_even = (x + y) % 2
+        x_is_even = x % 2
+        if (x_is_even and sum_is_even) or (not x_is_even and not sum_is_even):
+            return (x-1, y+1)
+        else:
+            return (x, y+1)
 
 def nord_ost(x, y):
     """
@@ -93,12 +100,13 @@ def nord_ost(x, y):
     (4, 1)
 
     """
-    sum_is_even = (x + y) % 2
-    x_is_even = x % 2
-    if (x_is_even and sum_is_even) or (not x_is_even and not sum_is_even):
-        return (x, y-1)
-    else:
-        return (x+1, y-1)
+    if isinstance(x, int) and isinstance(y, int):
+        sum_is_even = (x + y) % 2
+        x_is_even = x % 2
+        if (x_is_even and sum_is_even) or (not x_is_even and not sum_is_even):
+            return (x, y-1)
+        else:
+            return (x+1, y-1)
 
 def sued_ost(x, y):
     """
@@ -114,12 +122,13 @@ def sued_ost(x, y):
     (4, 8)
 
     """
-    sum_is_even = (x + y) % 2
-    x_is_even = x % 2
-    if (x_is_even and sum_is_even) or (not x_is_even and not sum_is_even):
-        return (x, y+1)
-    else:
-        return (x+1, y+1)
+    if isinstance(x, int) and isinstance(y, int):
+        sum_is_even = (x + y) % 2
+        x_is_even = x % 2
+        if (x_is_even and sum_is_even) or (not x_is_even and not sum_is_even):
+            return (x, y+1)
+        else:
+            return (x+1, y+1)
 
 if __name__ == "__main__":
     import doctest

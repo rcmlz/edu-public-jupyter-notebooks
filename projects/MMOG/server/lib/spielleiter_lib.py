@@ -60,18 +60,20 @@ def spielleiter(shutdown_flag, anzeige_aktualisieren_flag, re_spawn_flag, spiel,
                     reply = str(spiel["spieler"][spieler])
 
                 postausgang.put((spieler, reply))
-                        
+                            
         except Empty as inst:
             pass
         except Exception as inst:
+            postausgang.put((spieler, "Befehl nicht erkannt {}".format(befehl)))
             print("Fehler: spielleiter() {} : {} : {}".format(spieler, befehl, inst))
         else: # nothing went wrong
             posteingang.task_done()
+#        finally:
 
     re_spawner.join()
 
 def update_spiel(spiel, spieler, result):
-    spiel["spieler"][spieler]["msg"] = result['new_msg']
+    spiel["spieler"][spieler]["nachricht"] = result['new_msg']
 
     updated = False
     if result['new_pos'] is not None:

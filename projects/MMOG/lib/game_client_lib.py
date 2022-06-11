@@ -23,7 +23,8 @@ class Game_Client:
         self.mund = "{}/{}/mund".format(self.spiel,self.spieler)
         self.ohr = "{}/{}/ohr".format(self.spiel,self.spieler)
         self.trennzeichen = config["trennzeichen"]
-
+        self.client_send_sleep = config["client_send_sleep"]
+        
         self.client = self.setup_mqtt(config)
 
     def attribute(self):
@@ -45,6 +46,7 @@ class Game_Client:
 
     def publish(self, message):
         self.client.publish(self.mund, message)
+        sleep(self.client_send_sleep)
 
     def disconnect(self):
         self.client.disconnect()
@@ -71,13 +73,25 @@ class Game_Client:
 
             return client
 
+def print_status(game_client):
+    """
+    Gibt alle Attribute sortiert auf der Konsole aus.
+    """
+    attribute = game_client.attribute()
+    print("#" * 50)
+    for key in sorted(attribute):
+        print("{}: {}".format(key, attribute[key]))
+    print("#" * 50)
+
+
 # das folgende läuft via react() in einem eigenen Thread, deshalb die Hantiererei mit global ... nicht schön, aber erstmal ok
 def react(topic, message):
     m = "{} : {}"
-    print(m.format(topic, message))
     #Wenn wir eine {...} Nachricht empfangen, steht da u.A. position und staerke drin, dass merken wir uns gleich
     if message[0] == "{" and message[-1] == "}":
         aktualisieren(message)
+    else:
+        print(m.format(topic, message))
 
 def aktualisieren(message):
     global attribute, attribute_aktuell
