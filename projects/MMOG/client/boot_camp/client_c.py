@@ -39,7 +39,7 @@ def manuelle_steuerung(game_client):
             spawnen_x_mal(game_client, 10) # 10 x nacheinander spawnen
 
         elif befehl == "c":
-            ein_schritt_nach_norden(game_client)
+            einen_schritt_nach_norden(game_client)
 
         else:
             print("Befehl: {}".format(befehl))
@@ -48,21 +48,21 @@ def manuelle_steuerung(game_client):
         print_status(game_client)
 
 
-def ein_schritt_nach_norden(game_client):
+def einen_schritt_nach_norden(game_client):
     """
     Als dritte Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden.
-    
+
     Die aus ../../lib/moves.py importiere Bibliotheksfunktion nord() berechnet die Zielkoordinaten der Zelle nördlich der aktuellen Position.
-    
+
     x_neu, y_neu = nord(x_aktuell, y_aktuell)
-    
+
     """
-    
+
     # Auslesen der aktuellen Position aus den Attributen
     attribute = game_client.attribute()
     x_aktuell = attribute["position"][0]
     y_aktuell = attribute["position"][1]
-    
+
     # Berechnung der Zielkoordinaten und absetzen des entsprechenden move#x,y Befehls
     pass
 

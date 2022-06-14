@@ -36,17 +36,34 @@ def manuelle_steuerung(game_client):
             spawnen(game_client)
 
         elif befehl == "b":
+            spawnen_x_mal(game_client, 10) # 10 x nacheinander spawnen
+
+        elif befehl == "c":
             einen_schritt_nach(game_client, "nord")
-            einen_schritt_nach(game_client, "nord_west")
-        
+
+        elif befehl == "d":
+            n_schritte_nach_norden(game_client, 3)
+
+        elif befehl == "e":
+            einen_schritt_nach(game_client, "nord")
+
+        elif befehl == "f":
+            einen_schritt_nach_norden_und_einen_nach_nordwesten(game_client)
+
         else:
             print("Befehl: {}".format(befehl))
             game_client.publish(befehl)
 
         print_status(game_client)
 
-# Aufgabe 8 - vereinfachen sie diese Datei, indem Sie die Funktion einen_schritt_nach(game_client, richtung) überal dort nutzen. 
-# Löschen Sie die unsicheren Codes bzw. unnötigen Bestandteile.
+def n_schritte_nach(game_client, n, richtung):
+    """
+    Als Neunte Aufgabe implementieren Sie eine Funktion, die Ihre Figur n Schritte in eine Richtung bewegt und ersetzen die Funktion n_schritte_nach_norden() damit.
+    """
+
+    pass
+
+# Aufgabe 8 - vereinfachen sie diese Datei, indem Sie die Funktion einen_schritt_nach(game_client, richtung) überall dort nutzen, wo angebracht. Löschen Sie die unsicheren bzw. unnötigen Funktionen.
 
 def einen_schritt_nach(game_client, richtung):
     """
@@ -62,15 +79,15 @@ def einen_schritt_nach(game_client, richtung):
     nord_ost(x, y)
     sued_ost(x, y)
     """
-    
+
     # Auslesen der aktuellen Position aus den Attributen
     attribute = game_client.attribute()
     x_aktuell = attribute["position"][0]
     y_aktuell = attribute["position"][1]
-    
+
     # Berechnung der Zielkoordinaten
     x_neu, y_neu = None, None
-    
+
     if richtung == "nord":
         x_neu, y_neu = nord(x_aktuell, y_aktuell)
     elif richtung == "sued":
@@ -91,6 +108,35 @@ def einen_schritt_nach(game_client, richtung):
         if x_neu >= 0 and y_neu >= 0:
             befehl = "move#{},{}".format(x_neu, y_neu)
             game_client.publish(befehl)
+
+
+def einen_schritt_nach_norden_und_einen_nach_nordwesten(game_client):
+    """
+    Als sechste Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden und anschliessend einen Schritt nach Nordenwesten, ohne von der Spielfläche zu fallen.
+
+    Nutzen Sie die Bibliotheksfunktionen
+
+    nord(x, y)
+    nord_west(x, y)
+
+    """
+    einen_schritt_nach(game_client, "nord")
+    einen_schritt_nach(game_client, "nord_west")
+
+def n_schritte_nach_norden(game_client, n):
+    """
+    Als vierte Aufgabe bewegen Sie Ihre Figur n Schritte nach Norden.
+    """
+
+    for _ in range(n):
+        einen_schritt_nach(game_client, "nord")
+
+def spawnen_x_mal(game_client, n):
+    """
+    Als zweite Aufgabe spawnen Sie n mal nacheinander.
+    """
+    for _ in range(n):
+        spawnen(game_client)
 
 
 def spawnen(game_client):

@@ -43,12 +43,12 @@ def manuelle_steuerung(game_client):
 
         elif befehl == "d":
             n_schritte_nach_norden(game_client, 3)
-        
+
         elif befehl == "e":
             einen_sicheren_schritt_nach_norden(game_client)
-        
+
         # Verzweigung für einen_schritt_nach_norden_und_einen_nach_nordwesten() einbauen
-        
+
         else:
             print("Befehl: {}".format(befehl))
             game_client.publish(befehl)
@@ -59,7 +59,7 @@ def manuelle_steuerung(game_client):
 def einen_schritt_nach_norden_und_einen_nach_nordwesten(game_client):
     """
     Als sechste Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden und anschliessend einen Schritt nach Nordenwesten, ohne von der Spielfläche zu fallen.
-    
+
     Nutzen Sie die Bibliotheksfunktionen.
 
     nord(x, y)
@@ -72,16 +72,16 @@ def einen_schritt_nach_norden_und_einen_nach_nordwesten(game_client):
 def einen_sicheren_schritt_nach_norden(game_client):
     """
     Als fünfte Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden - OHNE von der Spielfläche zu fallen.
-        
+
     Ändern Sie auch n_schritte_nach_norden(), diese neue, sichere Funktion zu verwenden.
-    
+
     """
-    
+
     # Auslesen der aktuellen Position aus den Attributen
     attribute = game_client.attribute()
     x_aktuell = attribute["position"][0]
     y_aktuell = attribute["position"][1]
-    
+
     # Berechnung der Zielkoordinaten
     x_neu, y_neu = nord(x_aktuell, y_aktuell)
 
@@ -106,24 +106,22 @@ def n_schritte_nach_norden(game_client, n):
 def einen_schritt_nach_norden(game_client):
     """
     Als dritte Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden.
-    
+
     Die aus ../../lib/moves.py importiere Bibliotheksfunktion nord() berechnet die Zielkoordinaten der Zelle nördlich der aktuellen Position.
-    
+
     x_neu, y_neu = nord(x_aktuell, y_aktuell)
-    
+
     """
-    
+
     # Auslesen der aktuellen Position aus den Attributen
     attribute = game_client.attribute()
     x_aktuell = attribute["position"][0]
     y_aktuell = attribute["position"][1]
-    
+
     # Berechnung der Zielkoordinaten
     x_neu, y_neu = nord(x_aktuell, y_aktuell)
 
     # und absetzen des entsprechenden move#x,y Befehls
-    
-    # aber nur, wenn x_neu und y_neu nicht None oder negativ sind
     befehl = "move#{},{}".format(x_neu, y_neu)
     game_client.publish(befehl)
 
