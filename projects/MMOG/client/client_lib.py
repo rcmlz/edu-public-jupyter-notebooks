@@ -1,9 +1,6 @@
 import sys
 sys.path.append('../lib/')
 
-# grundlegende Funktionen für die MQTT-Kommunikation mit dem Server
-from game_client_lib import *
-
 # vordefinierte Funktionen wie nord(), sued(), etc. ... zum Bewegen der Figur
 from moves import *
 
@@ -11,15 +8,15 @@ def einen_schritt_nach(game_client, richtung):
     """
     richtung in ("nord", "sued", "nord_west", "sued_west", "nord_ost", "sued_ost")
     """
-    
+
     # Auslesen der aktuellen Position aus den Attributen
     attribute = game_client.attribute()
     x_aktuell = attribute["position"][0]
     y_aktuell = attribute["position"][1]
-    
+
     # Berechnung der Zielkoordinaten
     x_neu, y_neu = None, None
-    
+
     if richtung == "nord":
         x_neu, y_neu = nord(x_aktuell, y_aktuell)
     elif richtung == "sued":
