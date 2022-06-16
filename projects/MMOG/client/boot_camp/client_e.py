@@ -47,10 +47,9 @@ def manuelle_steuerung(game_client):
         # Verzweigung für einen_sicheren_schritt_nach_norden() einbauen
 
         else:
-            print("Befehl: {}".format(befehl))
             game_client.publish(befehl)
 
-        print_status(game_client)
+        game_client.print_attribute()
 
 def einen_sicheren_schritt_nach_norden(game_client):
     """

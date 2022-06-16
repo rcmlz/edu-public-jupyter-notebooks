@@ -44,10 +44,9 @@ def manuelle_steuerung(game_client):
         # Verzweigung für n_schritte_nach_norden() einbauen
         
         else:
-            print("Befehl: {}".format(befehl))
             game_client.publish(befehl)
 
-        print_status(game_client)
+        game_client.print_attribute()
 
 
 def n_schritte_nach_norden(game_client, n):

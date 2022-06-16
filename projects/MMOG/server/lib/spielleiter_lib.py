@@ -10,10 +10,11 @@ from common_lib import *
 
 import sys
 sys.path.append('../')
-from server_gehirn import gehirn, befehle
+from server_gehirn import gehirn
 
 sys.path.append('../../lib/')
 from moves import *
+from befehle import *
 
 def re_spawn(shutdown_flag, re_spawn_flag, spiel, posteingang):
     while not shutdown_flag.isSet():
@@ -35,36 +36,31 @@ def spielleiter(shutdown_flag, anzeige_aktualisieren_flag, re_spawn_flag, spiel,
         try:
             spieler, befehl = posteingang.get(timeout=1)
             
-            befehl, parameter = zerteile(befehl, spiel)
+            befehl_stripped, parameter = zerteile(befehl, spiel)
                 
-            if befehl in befehle.keys():
+            if befehl_stripped in befehle.keys():
                 spiel["spieler"][spieler]["max_x"] = spiel["conf"]["max_x"]
                 spiel["spieler"][spieler]["max_y"] = spiel["conf"]["max_y"]
 
                 ergebnis = {}
+                ergebnis['befehl'] = befehl
                 ergebnis['new_pos'] = None
                 ergebnis['new_life'] = None
-                ergebnis['new_msg'] = None
+                ergebnis['antwort'] = None
 
-                gehirn(spiel, spieler, ergebnis, befehl, parameter)
+                gehirn(spiel, spieler, ergebnis, befehl_stripped, parameter)
 
-                if befehl == "help":
-                    reply = ergebnis['new_msg']
-                else:
-                    ergebnis['new_msg'] = "re: " + ergebnis['new_msg']
-                
-                    # update_spiel() gibt True zurück, falls Positionen oder Leben aktualisiert wurde
-                    if update_spiel(spiel, spieler, ergebnis):
-                        anzeige_aktualisieren_flag.set()
- 
-                    reply = str(spiel["spieler"][spieler])
+                # update_spiel() gibt True zurück, falls Positionen oder Leben aktualisiert wurde
+                if update_spiel(spiel, spieler, ergebnis):
+                    anzeige_aktualisieren_flag.set()
+
+                reply = str(spiel["spieler"][spieler])
 
                 postausgang.put((spieler, reply))
                             
         except Empty as inst:
             pass
         except Exception as inst:
-            postausgang.put((spieler, "Befehl nicht erkannt {}".format(befehl)))
             print("Fehler: spielleiter() {} : {} : {}".format(spieler, befehl, inst))
         else: # nothing went wrong
             posteingang.task_done()
@@ -73,7 +69,8 @@ def spielleiter(shutdown_flag, anzeige_aktualisieren_flag, re_spawn_flag, spiel,
     re_spawner.join()
 
 def update_spiel(spiel, spieler, result):
-    spiel["spieler"][spieler]["nachricht"] = result['new_msg']
+    spiel["spieler"][spieler]["befehl"] = result['befehl']
+    spiel["spieler"][spieler]["antwort"] = result['antwort']
 
     updated = False
     if result['new_pos'] is not None:

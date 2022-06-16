@@ -51,10 +51,9 @@ def manuelle_steuerung(game_client):
             einen_schritt_nach_norden_und_einen_nach_nordwesten(game_client)
 
         else:
-            print("Befehl: {}".format(befehl))
             game_client.publish(befehl)
 
-        print_status(game_client)
+        game_client.print_attribute()
 
 
 def einen_schritt_nach(game_client, richtung):

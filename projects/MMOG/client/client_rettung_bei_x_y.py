@@ -48,7 +48,7 @@ def manuelle_steuerung(game_client):
 
 def rettung_bei_x_y(game_client, x_ziel = 0, y_ziel = 0):
     """
-    Die Figur beweg sich so schnell wie möglich zu den Zielkoordinaten (default 0,0).
+    Die Figur bewegt sich so schnell wie möglich zu den Zielkoordinaten (default 0,0).
 
     """
     x_aktuell, y_aktuell = None, None

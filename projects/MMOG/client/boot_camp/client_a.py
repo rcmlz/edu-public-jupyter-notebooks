@@ -24,8 +24,8 @@ def manuelle_steuerung(game_client):
     Sendet eingegebene Befehle zum Server und gibt des Status auf der Konsole aus.
     """
     while True:
-        befehl = input("Befehl? (z.B.: help|status|spawn|harakiri|move#x,y)", False)  # False: wenn "Abbrechen" geklickt wird, wird None zurückgegeben
-
+        befehl = input("Befehl? (z.B.: help|status|spawn|harakiri|move#x,y)", False)  # TigerJython: False: wenn "Abbrechen" geklickt wird, wird None zurückgegeben
+        
         if befehl in (None,":bye"):
             break  # while Schleife verlassen
 
@@ -33,17 +33,16 @@ def manuelle_steuerung(game_client):
             spawnen(game_client)
 
         else:
-            print("Befehl: {}".format(befehl))
             game_client.publish(befehl)
 
-        print_status(game_client)
+        game_client.print_attribute()
 
 
 def spawnen(game_client):
     """
     Als erste Aufgabe spawnen Sie 1x.
     """
-    pass # pass löschen den "spawn" Befehl via game_client publishen
+    pass # pass löschen und den "spawn" Befehl via game_client publishen
 
 ##############################################################
 # Programm

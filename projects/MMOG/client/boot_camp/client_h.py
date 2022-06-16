@@ -50,11 +50,10 @@ def manuelle_steuerung(game_client):
         elif befehl == "f":
             einen_schritt_nach_norden_und_einen_nach_nordwesten(game_client)
 
-        else:
-            print("Befehl: {}".format(befehl))
+         else:
             game_client.publish(befehl)
 
-        print_status(game_client)
+        game_client.print_attribute()
 
 # Aufgabe 8 - vereinfachen sie diese Datei, indem Sie die Funktion einen_schritt_nach(game_client, richtung) überal dort nutzen. Löschen Sie die unsicheren bzw. unnötigen Bestandteile.
 

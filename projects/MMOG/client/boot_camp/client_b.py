@@ -36,10 +36,9 @@ def manuelle_steuerung(game_client):
             spawnen_x_mal(game_client, 10) # 10 x nacheinander spawnen
 
         else:
-            print("Befehl: {}".format(befehl))
             game_client.publish(befehl)
 
-        print_status(game_client)
+        game_client.print_attribute()
 
 
 def spawnen_x_mal(game_client, n):

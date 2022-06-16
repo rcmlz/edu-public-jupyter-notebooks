@@ -13,7 +13,7 @@ from befehle import *
 def gehirn(spiel, spieler, ergebnis, befehl, parameter=None):
     global befehle
 
-    new_msg = befehl
+    new_msg = "OK"
     new_life = None
     new_pos = None
 
@@ -74,7 +74,7 @@ def gehirn(spiel, spieler, ergebnis, befehl, parameter=None):
 
     ergebnis['new_pos'] = new_pos
     ergebnis['new_life'] = new_life
-    ergebnis['new_msg'] = new_msg
+    ergebnis['antwort'] = new_msg
 
     return ergebnis
 
@@ -148,8 +148,8 @@ def help(ergebnis):
     global befehle
     new_msg = ""
     for befehl, attribute in befehle.items():
-        new_msg = new_msg + "\n" + befehl + " - " + attribute["doc"]
-    ergebnis['new_msg'] = new_msg
+        new_msg = new_msg + "\n\t" + befehl + " - " + attribute["doc"]
+    ergebnis['antwort'] = new_msg + "\n"
     return None
 
 if __name__ == "__main__":

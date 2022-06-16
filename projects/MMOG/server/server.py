@@ -3,7 +3,7 @@
 
 from json import load
 from Queue import Queue as queue
-from threading import Thread, Event, Condition
+from threading import Thread, Event
 
 import sys
 sys.path.append('lib')
@@ -38,6 +38,8 @@ def main(conf_file):
         ,"conf" : {
              "max_y" : int(SPIELFELDER_VERTIKAL)
             ,"max_x" : int(SPIELFELDER_HORIZONTAL)
+            ,"subscribe_to" : "mund"
+            ,"publish_to" : "ohr"
             ,"trennzeichen" : config["trennzeichen"]
         }
     }
