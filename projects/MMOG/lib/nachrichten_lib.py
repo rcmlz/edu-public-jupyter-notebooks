@@ -59,7 +59,7 @@ def on_message(client, userdata, message):
     kanal = userdata["spiel"]["conf"]["subscribe_to"]
     n = -1 * (len(kanal) + 1) # + 1 wegen /
     userdata["posteingang"].put((message.topic[0:n], message.payload))
-    
+
 def on_connect(client, userdata, flags, rc):
     print("Verbindung mit {} auf Port {}: {}".format(userdata["broker"],userdata["port"],mqtt.connack_string(rc)))
     kanale_qos = initialisiere_subscription(userdata["spiel"])

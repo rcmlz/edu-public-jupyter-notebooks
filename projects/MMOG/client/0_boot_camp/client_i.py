@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 ##############################################################
 # Imports
@@ -112,7 +112,7 @@ def einen_schritt_nach(game_client, richtung):
 
 def einen_schritt_nach_norden_und_einen_nach_nordwesten(game_client):
     """
-    Als sechste Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden und anschliessend einen Schritt nach Nordenwesten, ohne von der Spielfläche zu fallen.
+    Als sechste Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden und anschliessend einen Schritt nach Nordenwesten, ohne von der Spielflaeche zu fallen.
 
     Nutzen Sie die Bibliotheksfunktionen
 

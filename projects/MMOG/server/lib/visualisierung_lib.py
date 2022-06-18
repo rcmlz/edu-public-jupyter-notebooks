@@ -9,7 +9,7 @@ from math import sin, radians, ceil
 from gturtle import *
 from common_lib import *
 
-SPIELFELDER_VERTIKAL = 15
+SPIELFELDER_VERTIKAL = 16
 SPIELFELDER_HORIZONTAL = int(ceil(SPIELFELDER_VERTIKAL / 3))
 
 PADDING = 10
@@ -55,7 +55,7 @@ STIFT.setFontSize(10)
 def visualisierung(shutdown_flag, anzeige_aktualisieren_flag, config, spiel):
     """
     To Do
-    """    
+    """
     STIFT.setTitle("MMOG - Massive Multiuser Online Game - {} x {}".format(SPIELFELDER_VERTIKAL, SPIELFELDER_HORIZONTAL))
     STIFT.addStatusBar(30)
     STIFT.drawImage("resources/tribute.jpg")
@@ -71,7 +71,7 @@ def visualisierung(shutdown_flag, anzeige_aktualisieren_flag, config, spiel):
                 config["MQTT"]["broker"], config["MQTT"]["port"], config["game_name"]
             )
         )
-        
+
     STIFT.repaint()
 
     while not shutdown_flag.isSet():
@@ -86,13 +86,13 @@ def visualisierung(shutdown_flag, anzeige_aktualisieren_flag, config, spiel):
                 except Exception as inst:
                     print("Fehler: {}".format(inst))
         except:
-            pass    
+            pass
 
 def zeichne(spiel):
         zeichne_hintergrund()
         zeichne_seitenleiste(spiel)
         zeichne_spieler(spiel)
-        
+
         #playTone([("c", 700),("e", 1500)], instrument="trumpet")
         #playTone([("c", 700),("e", 1500)], instrument="organ")
         #playTone([("c", 700),("e", 1500)], instrument="piano")

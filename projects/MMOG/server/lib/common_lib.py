@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from random import shuffle, randint
 
 def positionen(spiel):

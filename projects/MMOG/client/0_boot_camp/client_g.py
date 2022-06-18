@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 ##############################################################
 # Imports
@@ -39,7 +39,7 @@ def manuelle_steuerung(game_client):
             spawnen_x_mal(game_client, 10) # 10 x nacheinander spawnen
 
         elif befehl == "c":
-            einen_schritt_nach_norden(game_client)
+            ein_schritt_nach_norden(game_client)
 
         elif befehl == "d":
             n_schritte_nach_norden(game_client, 3)
@@ -50,12 +50,11 @@ def manuelle_steuerung(game_client):
         elif befehl == "f":
             einen_schritt_nach_norden_und_einen_nach_nordwesten(game_client)
 
-         else:
+        else:
             game_client.publish(befehl)
 
         game_client.print_attribute()
 
-# Aufgabe 8 - vereinfachen sie diese Datei, indem Sie die Funktion einen_schritt_nach(game_client, richtung) überal dort nutzen. Löschen Sie die unsicheren bzw. unnötigen Bestandteile.
 
 def einen_schritt_nach(game_client, richtung):
     """
@@ -71,40 +70,12 @@ def einen_schritt_nach(game_client, richtung):
     nord_ost(x, y)
     sued_ost(x, y)
     """
-
-    # Auslesen der aktuellen Position aus den Attributen
-    attribute = game_client.attribute()
-    x_aktuell = attribute["position"][0]
-    y_aktuell = attribute["position"][1]
-
-    # Berechnung der Zielkoordinaten
-    x_neu, y_neu = None, None
-
-    if richtung == "nord":
-        x_neu, y_neu = nord(x_aktuell, y_aktuell)
-    elif richtung == "sued":
-        x_neu, y_neu = sued(x_aktuell, y_aktuell)
-    elif richtung == "nord_west":
-        x_neu, y_neu = nord_west(x_aktuell, y_aktuell)
-    elif richtung == "sued_west":
-        x_neu, y_neu = sued_west(x_aktuell, y_aktuell)
-    elif richtung == "nord_ost":
-        x_neu, y_neu = nord_ost(x_aktuell, y_aktuell)
-    elif richtung == "sued_ost":
-        x_neu, y_neu = sued_ost(x_aktuell, y_aktuell)
-
-    # und absetzen des entsprechenden move#x,y Befehls
-    # aber nur, wenn x_neu und y_neu nicht None
-    if x_neu != None and y_neu != None:
-        # oder negativ sind
-        if x_neu >= 0 and y_neu >= 0:
-            befehl = "move#{},{}".format(x_neu, y_neu)
-            game_client.publish(befehl)
+    pass
 
 
 def einen_schritt_nach_norden_und_einen_nach_nordwesten(game_client):
     """
-    Als sechste Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden und anschliessend einen Schritt nach Nordenwesten, ohne von der Spielfläche zu fallen.
+    Als sechste Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden und anschliessend einen Schritt nach Nordenwesten, ohne von der Spielflaeche zu fallen.
 
     Nutzen Sie die Bibliotheksfunktionen
 
@@ -112,15 +83,15 @@ def einen_schritt_nach_norden_und_einen_nach_nordwesten(game_client):
     nord_west(x, y)
 
     """
-    einen_schritt_nach(game_client, "nord")
-    einen_schritt_nach(game_client, "nord_west")
+    einen_sicheren_schritt_nach_norden(game_client)
+    einen_sicheren_schritt_nach_nord_westen(game_client)
 
 
 def einen_sicheren_schritt_nach_nord_westen(game_client):
     """
-    Als fünfte Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden - OHNE von der Spielfläche zu fallen.
+    Als fuenfte Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden - OHNE von der Spielflaeche zu fallen.
 
-    Ändern Sie auch n_schritte_nach_norden(), diese neue, sichere Funktion zu verwenden.
+    Aendern Sie auch n_schritte_nach_norden(), diese neue, sichere Funktion zu verwenden.
 
     """
 
@@ -143,9 +114,9 @@ def einen_sicheren_schritt_nach_nord_westen(game_client):
 
 def einen_sicheren_schritt_nach_norden(game_client):
     """
-    Als fünfte Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden - OHNE von der Spielfläche zu fallen.
+    Als fuenfte Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden - OHNE von der Spielflaeche zu fallen.
 
-    Ändern Sie auch n_schritte_nach_norden(), diese neue, sichere Funktion zu verwenden.
+    Aendern Sie auch n_schritte_nach_norden(), diese neue, sichere Funktion zu verwenden.
 
     """
 
@@ -179,7 +150,7 @@ def einen_schritt_nach_norden(game_client):
     """
     Als dritte Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden.
 
-    Die aus ../../lib/moves.py importiere Bibliotheksfunktion nord() berechnet die Zielkoordinaten der Zelle nördlich der aktuellen Position.
+    Die aus ../../lib/moves.py importiere Bibliotheksfunktion nord() berechnet die Zielkoordinaten der Zelle noerdlich der aktuellen Position.
 
     x_neu, y_neu = nord(x_aktuell, y_aktuell)
 

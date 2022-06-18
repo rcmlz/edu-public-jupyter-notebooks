@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 import ast #to do: replace by json for security
 
@@ -13,7 +13,7 @@ try: # Python 3.x
 except ImportError: # Python 2.7
     from Queue import Empty
     from Queue import Queue as queue
-    
+
 from nachrichten_lib import nachrichten
 from befehle import *
 
@@ -63,12 +63,12 @@ class Game_Client:
         """
         Gibt alle Attribute sortiert auf der Konsole aus.
         """
-        out = "Keine Attribute gefunden - führe 'status' aus und prüfe, ob dein Game-Server läuft!"
+        out = "Keine Attribute gefunden - fuehre 'status' aus und pruefe, ob dein Game-Server laeuft!"
         if len(attribute.keys()) > 0:
-            out = "\n" + "#" * 50 + "\n" 
+            out = "\n" + "#" * 50 + "\n"
             for key in sorted(attribute):
                 out += "{}: {}\n".format(key, attribute[key])
-            out += "#" * 50 
+            out += "#" * 50
         print(out)
 
 
@@ -77,14 +77,14 @@ class Game_Client:
 
         if not "updated" in attribute.keys():
             self.refresh_attribute()
-        
+
         try:
             t = 5
             if not attribute_aktuell.isSet():
                 attribute_aktuell.wait(timeout=t)
         except Exception as inst:
             print("Error! Keine Nachricht vom Game-Server in {} sec empfangen: Attribute nicht aktualisiert!".format(t))
-    
+
         return attribute
 
     def refresh_attribute(self):
@@ -99,10 +99,10 @@ class Game_Client:
 
         # wir wollen sicherstellen, dass die in der Antwort enthaltenen Attribute aktualisiert wurden.
         m = "move"
-        lm = len(m)    
+        lm = len(m)
         if message != "help" and ( message in befehle.keys() or message[0:lm] == m ):
             attribute_aktuell.clear()
-        
+
         self.postausgang.put((kanal, message))
         sleep(self.client_send_sleep)
 
@@ -119,18 +119,19 @@ def attribute_aktualisieren(shutdown_flag, posteingang):
     while not shutdown_flag.isSet():
         try:
             kanal, message = posteingang.get(timeout=2)
-            if message[0] == "{" and message[-1] == "}":
-                try:
-                    payload = ast.literal_eval(message) #ToDo: hier ist ein Sicherheitsproblem ... das müsste man durch json-parsing ersetzen
-                except Exception as inst:
-                    print(inst)
-                    print(message)
-                else: # nothing went wrong
-                    attribute = payload
-                    attribute["updated"] = strftime('%Y-%m-%d %H:%M:%S')
-                    posteingang.task_done()
-                finally:
-                    attribute_aktuell.set()
+            try:
+                if not isinstance(message, str):
+                    message = message.decode('UTF-8')
+                payload = ast.literal_eval(message) #ToDo: hier ist ein Sicherheitsproblem ... das müsste man durch json-parsing ersetzen
+            except Exception as inst:
+                print(inst)
+                print(message)
+            else: # nothing went wrong
+                attribute = payload
+                attribute["updated"] = strftime('%Y-%m-%d %H:%M:%S')
+                posteingang.task_done()
+            finally:
+                attribute_aktuell.set()
 
         except Empty as inst:
             pass

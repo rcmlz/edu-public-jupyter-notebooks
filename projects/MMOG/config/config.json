@@ -5,7 +5,7 @@
             ,"port" : "1883"
           }
   ,"trennzeichen" : "#"
-  ,"client_send_sleep" : 0.25
+  ,"client_send_sleep" : 0.5
   ,"verbose" : false
   ,"spieler_datei" : "resources/valid_actors_input.txt"
   ,"symbole_datei" : "resources/valid_symbols_input.txt"

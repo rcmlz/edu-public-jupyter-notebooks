@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 ##############################################################
 # Imports
@@ -41,17 +41,53 @@ def manuelle_steuerung(game_client):
         elif befehl == "c":
             einen_schritt_nach_norden(game_client)
 
+        elif befehl == "d":
+            n_schritte_nach_norden(game_client, 3)
+
+        # Verzweigung für einen_sicheren_schritt_nach_norden() einbauen
+
         else:
             game_client.publish(befehl)
 
         game_client.print_attribute()
+
+def einen_sicheren_schritt_nach_norden(game_client):
+    """
+    Als fuenfte Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden - OHNE von der Spielflaeche zu fallen.
+
+    Aendern Sie auch n_schritte_nach_norden(), diese neue, sichere Funktion zu verwenden.
+
+    """
+
+    # Auslesen der aktuellen Position aus den Attributen
+    attribute = game_client.attribute()
+    x_aktuell = attribute["position"][0]
+    y_aktuell = attribute["position"][1]
+
+    # Berechnung der Zielkoordinaten
+    x_neu, y_neu = nord(x_aktuell, y_aktuell)
+
+    # und absetzen des entsprechenden move#x,y Befehls
+    # aber nur, wenn x_neu und y_neu nicht None
+    # HIER VERBESSERN
+    befehl = "move#{},{}".format(x_neu, y_neu)
+    game_client.publish(befehl)
+
+
+def n_schritte_nach_norden(game_client, n):
+    """
+    Als vierte Aufgabe bewegen Sie Ihre Figur n Schritte nach Norden.
+    """
+
+    for _ in range(n):
+        einen_schritt_nach_norden(game_client)
 
 
 def einen_schritt_nach_norden(game_client):
     """
     Als dritte Aufgabe bewegen Sie Ihre Figur einen Schritt nach Norden.
 
-    Die aus ../../lib/moves.py importiere Bibliotheksfunktion nord() berechnet die Zielkoordinaten der Zelle nördlich der aktuellen Position.
+    Die aus ../../lib/moves.py importiere Bibliotheksfunktion nord() berechnet die Zielkoordinaten der Zelle noerdlich der aktuellen Position.
 
     x_neu, y_neu = nord(x_aktuell, y_aktuell)
 
@@ -62,8 +98,12 @@ def einen_schritt_nach_norden(game_client):
     x_aktuell = attribute["position"][0]
     y_aktuell = attribute["position"][1]
 
-    # Berechnung der Zielkoordinaten und absetzen des entsprechenden move#x,y Befehls
-    pass
+    # Berechnung der Zielkoordinaten
+    x_neu, y_neu = nord(x_aktuell, y_aktuell)
+
+    # und absetzen des entsprechenden move#x,y Befehls
+    befehl = "move#{},{}".format(x_neu, y_neu)
+    game_client.publish(befehl)
 
 
 def spawnen_x_mal(game_client, n):

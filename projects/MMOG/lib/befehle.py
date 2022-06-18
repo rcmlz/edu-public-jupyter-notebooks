@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 befehle = {
      "help" : {
         "doc" : "gibt diese Hilfe aus"

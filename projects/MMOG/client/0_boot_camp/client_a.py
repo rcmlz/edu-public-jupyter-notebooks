@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 ##############################################################
 # Imports
@@ -25,7 +25,8 @@ def manuelle_steuerung(game_client):
     """
     while True:
         befehl = input("Befehl? (z.B.: help|status|spawn|harakiri|move#x,y)", False)  # TigerJython: False: wenn "Abbrechen" geklickt wird, wird None zurückgegeben
-        
+        #befehl = input("Befehl? (z.B.: help|status|spawn|harakiri|move#x,y)\n")  # Thonny Editor
+
         if befehl in (None,":bye"):
             break  # while Schleife verlassen
 

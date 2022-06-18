@@ -1,12 +1,21 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 ##############################################################
 # Imports
 ##############################################################
 import sys
+sys.path.append('../')
 sys.path.append('../../lib/')
+
+# grundlegende Funktionen für die MQTT-Kommunikation mit dem Server
 from game_client_lib import *
+
+# vordefinierte Funktionen wie nord(), sued(), etc. ... zum Bewegen der Figur
+from moves import *
+
+# in client_lib.py liegen eigene "fertige" Funktionen, die man immer wieder bei den verschiedenen Spielen verwendet
+from client_lib import *
 
 ##############################################################
 # Einstellungen
@@ -29,11 +38,7 @@ def manuelle_steuerung(game_client):
         if befehl in (None,":bye"):
             break  # while Schleife verlassen
 
-        elif befehl == "a":
-            spawnen(game_client)
-
-        elif befehl == "b":
-            spawnen_x_mal(game_client, 10) # 10 x nacheinander spawnen
+        # Verzweigung für rettung_bei_x_y() einbauen
 
         else:
             game_client.publish(befehl)
@@ -41,19 +46,17 @@ def manuelle_steuerung(game_client):
         game_client.print_attribute()
 
 
-def spawnen_x_mal(game_client, n):
+def rettung_bei_x_y(game_client, x_ziel = 0, y_ziel = 0):
     """
-    Als zweite Aufgabe spawnen Sie n mal nacheinander.
-    """
-    pass
+    Die Figur bewegt sich so schnell wie moeglich zu den Zielkoordinaten (default 0,0).
 
-
-def spawnen(game_client):
     """
-    Als erste Aufgabe spawnen Sie 1x.
-    """
-    befehl = "spawn"
-    game_client.publish(befehl)
+    x_aktuell, y_aktuell = None, None
+    while not (x_aktuell == x_ziel and y_aktuell == y_ziel):
+        attribute = game_client.attribute()
+        x_aktuell = attribute["position"][0]
+        y_aktuell = attribute["position"][1]
+        break # hier Ihren Algorithmus einbauen ...
 
 ##############################################################
 # Programm

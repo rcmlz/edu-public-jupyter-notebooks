@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 import sys
-sys.path.append('../lib/')
+sys.path.append('../../lib/')
 
 # vordefinierte Funktionen wie nord(), sued(), etc. ... zum Bewegen der Figur
 from moves import *
