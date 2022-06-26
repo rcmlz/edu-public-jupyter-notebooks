@@ -28,6 +28,8 @@ def spielleiter(shutdown_flag, anzeige_aktualisieren_flag, re_spawn_flag, spiel,
     """
     To Do
     """
+    global befehle
+    
     re_spawner = Thread(name="respawn", target=re_spawn, args=(shutdown_flag, re_spawn_flag, spiel, posteingang))
     re_spawner.daemon = True
     re_spawner.start()
@@ -37,8 +39,9 @@ def spielleiter(shutdown_flag, anzeige_aktualisieren_flag, re_spawn_flag, spiel,
             spieler, befehl = posteingang.get(timeout=1)
             
             befehl_stripped, parameter = zerteile(befehl, spiel)
-                
+            
             if befehl_stripped in befehle.keys():
+                
                 spiel["spieler"][spieler]["max_x"] = spiel["conf"]["max_x"]
                 spiel["spieler"][spieler]["max_y"] = spiel["conf"]["max_y"]
 
@@ -48,8 +51,12 @@ def spielleiter(shutdown_flag, anzeige_aktualisieren_flag, re_spawn_flag, spiel,
                 ergebnis['new_life'] = None
                 ergebnis['antwort'] = None
 
-                gehirn(spiel, spieler, ergebnis, befehl_stripped, parameter)
-
+                parameter_check_ok, err_msg = parameter_is_valid(parameter, befehle, befehl_stripped)
+                if parameter_check_ok:
+                    gehirn(spiel, spieler, ergebnis, befehl_stripped, parameter)
+                else:
+                    ergebnis['antwort'] = err_msg
+                    
                 # update_spiel() gibt True zurück, falls Positionen oder Leben aktualisiert wurde
                 if update_spiel(spiel, spieler, ergebnis):
                     anzeige_aktualisieren_flag.set()
@@ -89,17 +96,17 @@ def zerteile(befehl, spiel):
         b = befehl
         p = None
         
-        if spiel["conf"]["trennzeichen"] in befehl and len(befehl) > 2 and spiel["conf"]["trennzeichen"] not in [befehl[0], befehl[-1]]: # nicht nur befehl + trennzeichen
-            splitted = befehl.split(spiel["conf"]["trennzeichen"])
-            if trennzeichen_parameter in splitted[1] and len(splitted[1]) > 2 and spiel["conf"]["trennzeichen"] not in [splitted[1][0], splitted[1][-1]]: #es gibt mind. 2 Parameter
-                par = splitted[1].split(trennzeichen_parameter)
-                if len(par) == befehle[splitted[0]]["anzahl_parameter"]:
+        if spiel["conf"]["trennzeichen"] in befehl and len(befehl) > 2:
+            splitted = (befehl.split(spiel["conf"]["trennzeichen"]))
+            if isinstance(splitted, list) and len(splitted) > 1: # wir haben Parameter
+                if len(splitted[1]) > 2 and trennzeichen_parameter in splitted[1] and spiel["conf"]["trennzeichen"] not in [splitted[1][0], splitted[1][-1]]: #es gibt mind. 2 Parameter
+                    par = splitted[1].split(trennzeichen_parameter)
                     b = splitted[0]
                     p = par
-            else:
-                b = splitted[0]
-                p = splitted[1]
-
-        return (b, p)
+                else:
+                    b = splitted[0]
+                    p = splitted[1][0] #nur der erste buchstabe
+        return (b, (p))
+    
     except Exception as inst:
         print("Fehler zerteile(): {}".format(inst))

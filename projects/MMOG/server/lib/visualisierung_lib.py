@@ -9,11 +9,16 @@ from math import sin, radians, ceil
 from gturtle import *
 from common_lib import *
 
+ZEIGE_KOORDINATEN = True
+ZEIGE_LINIEN = True
+
 SPIELFELDER_VERTIKAL = 16
 SPIELFELDER_HORIZONTAL = int(ceil(SPIELFELDER_VERTIKAL / 3))
 
-PADDING = 10
-SEITENLAENGE = 50
+SKALIERUNG = 16 / SPIELFELDER_VERTIKAL
+
+PADDING = int(10 * SKALIERUNG) 
+SEITENLAENGE = int(50 * SKALIERUNG)
 ECKEN = 6
 
 DREHWINKEL = 360 / ECKEN
@@ -50,14 +55,21 @@ STIFT = None
 STIFT = makeTurtle()
 STIFT.ht()
 STIFT.enableRepaint(False)
-STIFT.setFontSize(10)
+STIFT.setFont(Font("SansSerif", Font.PLAIN, int(15 * SKALIERUNG)))
+STIFT.setPenColor("black") 
+STIFT.setPenWidth(1)
 
 def visualisierung(shutdown_flag, anzeige_aktualisieren_flag, config, spiel):
     """
     To Do
     """
+    zeichne_hintergrund()   
+    STIFT.savePlayground() # mit STIFT.clear() wird der Hintergrund wieder geladen
+                    
     STIFT.setTitle("MMOG - Massive Multiuser Online Game - {} x {}".format(SPIELFELDER_VERTIKAL, SPIELFELDER_HORIZONTAL))
     STIFT.addStatusBar(30)
+    STIFT.heading(0) #nord
+    STIFT.setPos(0, 0) 
     STIFT.drawImage("resources/tribute.jpg")
     if config["MQTT"].has_key("user") and config["MQTT"].has_key("password"):
         STIFT.setStatusText(
@@ -73,7 +85,7 @@ def visualisierung(shutdown_flag, anzeige_aktualisieren_flag, config, spiel):
         )
 
     STIFT.repaint()
-
+    
     while not shutdown_flag.isSet():
         try:
             anzeige_aktualisieren_flag.wait(timeout=1) # falls das auf True gesetzt ist, geht es ohne 1 Sek Pause weiter
@@ -89,7 +101,6 @@ def visualisierung(shutdown_flag, anzeige_aktualisieren_flag, config, spiel):
             pass
 
 def zeichne(spiel):
-        zeichne_hintergrund()
         zeichne_seitenleiste(spiel)
         zeichne_spieler(spiel)
 
@@ -106,12 +117,16 @@ def zeichne_hintergrund():
             STIFT.setHeading(90)
             new_x = LINKS_OBEN_X + x * X_SHIFT + OFFSET
             new_y = LINKS_OBEN_Y - y * Y_SHIFT
-            STIFT.setPos(new_x, new_y - 10)
-            STIFT.label("({},{})".format(x, y))
-            STIFT.setPos(new_x, new_y)
-            for i in range(ECKEN):
-                STIFT.fd(SEITENLAENGE)
-                STIFT.rt(DREHWINKEL)
+            
+            if ZEIGE_KOORDINATEN:
+                STIFT.setPos(new_x, new_y - int(15 * SKALIERUNG) )
+                STIFT.label("({},{})".format(x, y))
+            
+            if ZEIGE_LINIEN:
+                STIFT.setPos(new_x, new_y)
+                for i in range(ECKEN):
+                    STIFT.fd(SEITENLAENGE)
+                    STIFT.rt(DREHWINKEL)
 
 def zeichne_spieler(gamers, show_dead_gamers=False):
     for y in range(SPIELFELDER_VERTIKAL):
@@ -126,7 +141,7 @@ def zeichne_spieler(gamers, show_dead_gamers=False):
                     if (x, y) == werte["position"]:
                         new_x_img = new_x + C / 2
                         new_y_img = new_y - D / 2
-                        STIFT.setPos(new_x_img, new_y_img)
+                        STIFT.setPos(new_x_img, new_y_img - int(15 * SKALIERUNG))
                         STIFT.setHeading(0)
                         STIFT.drawImage("sprites/" + werte["bild"])
 
@@ -137,8 +152,8 @@ def zeichne_seitenleiste(gamers, show_dead_gamers=False):
     offset_y = 50
     for email, werte in gamers.items():
         if show_dead_gamers or werte["leben"] > 0:
-            STIFT.setPos(RECHTS_OBEN_X - 160, RECHTS_OBEN_Y - 20 - zeile * offset_y)
-            STIFT.label(email)
             STIFT.setPos(RECHTS_OBEN_X - 200, RECHTS_OBEN_Y - 20 - zeile * offset_y)
+            STIFT.label(email)
+            STIFT.setPos(RECHTS_OBEN_X - 230, RECHTS_OBEN_Y - 20 - zeile * offset_y)
             STIFT.drawImage("sprites/" + werte["bild"])
             zeile += 1

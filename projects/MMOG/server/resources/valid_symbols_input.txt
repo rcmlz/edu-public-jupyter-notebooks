@@ -21,9 +21,12 @@ ladybug.gif
 jellyfish.gif
 mario.png
 mouse.gif
-nemo.gif
 pupil_0.png
 pupil_1.png
 snemo.gif
 spider.png
 worm.png
+orange_0.gif
+spaceship.gif
+tinycar.png
+alien_1.gif

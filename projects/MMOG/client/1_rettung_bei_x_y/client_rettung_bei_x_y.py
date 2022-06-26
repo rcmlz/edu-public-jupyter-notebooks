@@ -51,12 +51,33 @@ def rettung_bei_x_y(game_client, x_ziel = 0, y_ziel = 0):
     Die Figur bewegt sich so schnell wie moeglich zu den Zielkoordinaten (default 0,0).
 
     """
-    x_aktuell, y_aktuell = None, None
-    while not (x_aktuell == x_ziel and y_aktuell == y_ziel):
+    # zunächst einmal die Attribute automatisch aktualisieren, damit wir wissen, wo wir stehen.
+    game_client.publish("status")
+    game_client.print_attribute()
+
+    # aktuelle Standortkoordinaten in Variablen speichern
+    attribute = game_client.attribute()
+    x_aktuell, y_aktuell = attribute["position"]
+
+    # Abbruchbedingungen
+    ziel_erreicht = x_aktuell == x_ziel and y_aktuell == y_ziel
+    hoffung = 100 # wenn auf 0 runtergezaehlt wurde, geben wir auf. Die Zahl 0 entspricht auch False, alles ausser 0 entspricht auch True
+    
+    while not ziel_erreicht and hoffung:
+    
+        # hier Ihren Algorithmus einbauen ...
+        # z.B. unter Verwendung der Funktion "einen_schritt_nach(game_client, "richtung")" aus client_lib.py
+        # oder etwas selbst gebautem aus den Funktionen game_client.publish("move#x,y") und den Hilfsfunktionen nord(), nord_west() etc.
+        # Nutzen Sie den Debugger!
+        
+        # Standortkoordinaten nach Bewegung
         attribute = game_client.attribute()
-        x_aktuell = attribute["position"][0]
-        y_aktuell = attribute["position"][1]
-        break # hier Ihren Algorithmus einbauen ...
+        x_aktuell, y_aktuell = attribute["position"]
+
+        # Abbruchbedingung aktualisieren
+        ziel_erreicht = x_aktuell == x_ziel and y_aktuell == y_ziel
+        hoffung -= 1
+
 
 ##############################################################
 # Programm

@@ -7,11 +7,11 @@ import sys
 sys.path.append('lib')
 from common_lib import *
 sys.path.append('../lib/')
+sys.path.append('../../lib/')
 from moves import *
 from befehle import *
 
 def gehirn(spiel, spieler, ergebnis, befehl, parameter=None):
-    global befehle
 
     new_msg = "OK"
     new_life = None
@@ -35,42 +35,37 @@ def gehirn(spiel, spieler, ergebnis, befehl, parameter=None):
         new_life=0
 
     elif befehl == "move":
-        if parameter is None:
-            new_msg = "Missing parameter move#x,y"
-        elif len(parameter) != befehle[befehl]["anzahl_parameter"]:
-            new_msg = "Missing parameter in move#x,y"
-        else:
-            x_new, y_new = parameter
-            x_old, y_old = spiel["spieler"][spieler]["position"]
+        x_new, y_new = parameter
+        x_old, y_old = spiel["spieler"][spieler]["position"]
 
-            x_old, y_old = int(x_old), int(y_old)
-            x_new, y_new = int(x_new), int(y_new)
-            max_x, max_y = int(max_x), int(max_y)
+        x_old, y_old = int(x_old), int(y_old)
+        x_new, y_new = int(x_new), int(y_new)
+        max_x, max_y = int(max_x), int(max_y)
 
-            if not 0 <= x_new < max_x or not 0 <= y_new < max_y:
-                new_pos=(None, None)
-                new_life=0
-                new_msg = "{} ist ausserhalb des Spielfeldes {} - du bist tot!".format((x_new, y_new), (max_x, max_y))
+        if not 0 <= x_new < max_x or not 0 <= y_new < max_y:
+            new_pos=(None, None)
+            new_life=0
+            new_msg = "{} ist ausserhalb des Spielfeldes {} - du bist tot!".format((x_new, y_new), (max_x, max_y))
 
-            elif x_old == None and y_old == None:
-                new_msg = "Du lebst ja nicht - please spawn"
+        elif x_old == None and y_old == None:
+            new_msg = "Du lebst ja nicht - please spawn"
 
-            elif x_new == x_old and y_new == y_old:
-                new_msg = "Du stehst schon auf Position {}".format((x_new, y_new))
+        elif x_new == x_old and y_new == y_old:
+            new_msg = "Du stehst schon auf Position {}".format((x_new, y_new))
 
-            elif (x_new, y_new) not in positionen(spiel):
+        elif (x_new, y_new) not in positionen(spiel):
 
-                if not ist_nah_genug(x_old, y_old, x_new, y_new):
-                    new_msg = "Position {} ist zu weit entfernt vom Standort {}".format((x_new, y_new), (x_old, y_old))
-                else:
-                    new_pos=(x_new, y_new)
-                    new_life= spiel["spieler"][spieler]["leben"] - 1
-
-            elif (x_new, y_new) in positionen(spiel):
-                new_msg = "Position {} ist besetzt".format((x_new, y_new))
-
+            if not ist_nah_genug(x_old, y_old, x_new, y_new):
+                new_msg = "Position {} ist zu weit entfernt vom Standort {}".format((x_new, y_new), (x_old, y_old))
             else:
-                print("Nanu ... wie kommen wir den hier hin? server_gehirn()")
+                new_pos=(x_new, y_new)
+                new_life= spiel["spieler"][spieler]["leben"] - 1
+
+        elif (x_new, y_new) in positionen(spiel):
+            new_msg = "Position {} ist besetzt".format((x_new, y_new))
+
+        else:
+            print("Nanu ... wie kommen wir den hier hin? server_gehirn()")
 
     ergebnis['new_pos'] = new_pos
     ergebnis['new_life'] = new_life
@@ -137,7 +132,7 @@ def initialisiere_position(spiel):
     To Do
     """
     taken = positionen(spiel)
-    forbidden = forbidden_positions()
+    forbidden = forbidden_positions(3, spiel["conf"]["max_y"])
     pos = (None, None)
     while pos in forbidden or pos in taken:
         pos = (randint(0, spiel["conf"]["max_x"] - 1), randint(0, spiel["conf"]["max_y"] - 1))

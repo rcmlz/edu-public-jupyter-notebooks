@@ -63,7 +63,7 @@ class Game_Client:
         """
         Gibt alle Attribute sortiert auf der Konsole aus.
         """
-        out = "Keine Attribute gefunden - fuehre 'status' aus und pruefe, ob dein Game-Server laeuft!"
+        out = "Keine Attribute gefunden - richtige E-Mail und Game-Server gesetzt? Fuehre 'status' aus und aktualisiere so deine Attribute!"
         if len(attribute.keys()) > 0:
             out = "\n" + "#" * 50 + "\n"
             for key in sorted(attribute):

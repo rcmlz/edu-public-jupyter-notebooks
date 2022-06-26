@@ -12,29 +12,34 @@ def positionen(spiel):
         pos.add(daten["position"])
     return pos
 
-def forbidden_positions():
+def forbidden_positions(x_max, y_max):
     forbidden = set()
-    forbidden.add((0,0))
     forbidden.add((None, None))
-#    forbidden.add((0,2))
-#    forbidden.add((0,1))
-#    forbidden.add((0,4))
-#    forbidden.add((0,3))
-#    forbidden.add((1,0))
-#    forbidden.add((1,2))
-#    forbidden.add((0,6))
-#    forbidden.add((0,5))
-#    forbidden.add((1,4))
-#    forbidden.add((1,3))
-#    forbidden.add((1,1))
-#    forbidden.add((0,8))
-#    forbidden.add((0,7))
-#    forbidden.add((1,6))
-#    forbidden.add((1,5))
-#    forbidden.add((2,4))
-#    forbidden.add((2,2))
-#    forbidden.add((2,0))
+    for x in range(x_max):
+        for y in range(y_max):
+            forbidden.add((x,y))
     return forbidden
+
+
+def parameter_is_valid(parameter, befehle, befehl):
+    erwartet = None
+
+    if "anzahl_parameter" in befehle[befehl].keys():
+        erwartet = befehle[befehl]["anzahl_parameter"]
+    
+    if parameter is None and erwartet is None:
+        return (True, "OK")
+    elif parameter is None:
+        err_msg = "Fehler in Befehl: '{}'. Parameter fehlt! Doc: {})".format(befehl, befehle[befehl]["doc"])
+        return (False, err_msg)
+    
+    gegeben = len(parameter)
+    if gegeben != erwartet:
+        err_msg = "Fehler in Befehl: '{}'. Gegeben: {} Erwartet: {} Doc: {})".format(befehl, gegeben, erwartet, befehle[befehl]["doc"])
+        return (False, err_msg)
+        
+    return (True, "OK")
+
 
 def initialisiere_spieler(config):
     """
@@ -59,7 +64,7 @@ def initialisiere_spieler(config):
 
     gamers = {}
     available_felder = config["SPIELFELDER_VERTIKAL"] * config["SPIELFELDER_HORIZONTAL"]
-    if len(emails) <= available_felder - len(forbidden_positions()):
+    if len(emails) <= available_felder - len(forbidden_positions(3, config["SPIELFELDER_VERTIKAL"])):
         for email in emails:
             gamers["{}/{}".format(config["game_name"],email)] = {
                     "bild": symbole[id_icon % count_icons],
