@@ -38,7 +38,8 @@ def manuelle_steuerung(game_client):
         if befehl in (None,":bye"):
             break  # while Schleife verlassen
 
-        # Verzweigung für rettung_bei_x_y() einbauen
+        elif befehl == "r":
+            rettung_bei_x_y(game_client)
 
         else:
             game_client.publish(befehl)
@@ -62,13 +63,13 @@ def rettung_bei_x_y(game_client, x_ziel = 0, y_ziel = 0):
     # Abbruchbedingungen
     ziel_erreicht = x_aktuell == x_ziel and y_aktuell == y_ziel
     hoffung = 10 # wenn auf 0 runtergezaehlt wurde (und wir feststecken), verlassen wir die Schleife. Die Zahl 0 entspricht auch False, alles ausser 0 entspricht auch True
+
+    algorithmus = ("nord_west", "nord", "sued_west")
     
     while not ziel_erreicht and hoffung:
     
-        # hier Ihren Algorithmus einbauen ...
-        # z.B. unter Verwendung der Funktion "einen_schritt_nach(game_client, "richtung")" aus client_lib.py
-        # oder etwas selbst gebautem aus den Funktionen game_client.publish("move#x,y") und den Hilfsfunktionen nord(), nord_west() etc.
-        # Nutzen Sie den Debugger!
+        for richtung in algorithmus:
+            einen_schritt_nach(game_client, richtung)
         
         # Standortkoordinaten nach Bewegung
         attribute = game_client.attribute()

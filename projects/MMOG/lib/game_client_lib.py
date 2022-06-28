@@ -97,14 +97,21 @@ class Game_Client:
         global attribute_aktuell
         kanal = list(self.spiel["spieler"].keys())[0] #es gibt ja nur einen Spieler
 
-        # wir wollen sicherstellen, dass die in der Antwort enthaltenen Attribute aktualisiert wurden.
-        m = "move"
-        lm = len(m)
-        if message != "help" and ( message in befehle.keys() or message[0:lm] == m ):
-            attribute_aktuell.clear()
+        # wir wollen sicherstellen, nur bekannte Befehle gesendet werden und 
+        # dass die in der Antwort enthaltenen Attribute aktualisiert wurden.
+        if isinstance(message, str): 
+            for befehl in befehle.keys():
+                if message.find(befehl) != -1:
+                    attribute_aktuell.clear()
+                    self.postausgang.put((kanal, message))
+                    sleep(self.client_send_sleep)
+                    return True
+    
+            print("Hinweis: Befehl {} nicht erkannt und deshalb ignoriert. Fuehre 'help' aus, um eine Uebersicht der Befehle zu erhalten.".format(message))
+        else:
+            print("Hinweis: Befehl {} nicht als String erkannt und deshalb ignoriert. Fuehre 'help' aus, um eine Uebersicht der Befehle zu erhalten.".format(message))
 
-        self.postausgang.put((kanal, message))
-        sleep(self.client_send_sleep)
+        return False  
 
 
     def disconnect(self):
