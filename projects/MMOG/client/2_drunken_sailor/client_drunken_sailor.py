@@ -56,8 +56,7 @@ def drunken_sailor(game_client, n):
 
     while True: # hier korrekte Bedingung anstelle von True einfuegen
         attribute = game_client.attribute()
-        x_aktuell = attribute["position"][0]
-        y_aktuell = attribute["position"][1]
+        x_aktuell, y_aktuell = attribute["position"]
 
         break # hier ihren Algorithmus einbauen
 
