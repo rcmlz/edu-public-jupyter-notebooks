@@ -1,2 +1,0 @@
-some_player_name@somewhere.org
-other_player@somewhere.com
